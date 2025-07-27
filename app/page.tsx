@@ -248,16 +248,112 @@ export default function Home() {
         <CardContent className="space-y-6 text-gray-700 dark:text-gray-300">
           <p>
             To solve the double-spending problem in a decentralized manner, the Bitcoin whitepaper introduces the
-            concept of a <strong>Timestamp Server</strong>. This server's primary role is to prove that transaction data
-            existed at a particular point in time.
+            concept of a <strong>Timestamp Server</strong>. This server takes a hash of a block of items to be
+            timestamped and <strong>publicly publishes the hash</strong>.
           </p>
           <p>
-            The timestamp server works by taking a hash of a block of items to be timestamped and publicly broadcasting
-            the hash. This timestamp proves that the data must have existed at that time, because otherwise, the hash
-            could not have been generated. Each timestamp includes the previous timestamp in its hash, forming a{" "}
-            <strong>chain of timestamps</strong>. This chain reinforces the integrity of the data, as altering any past
-            data would require redoing all subsequent hashes.
+            The timestamp proves that the data must have existed at that time, because obviously{" "}
+            <strong>the hash couldn't be generated without the data being there</strong>. This is a simple but powerful
+            concept - you can't create a hash of something that doesn't exist.
           </p>
+
+          {/* Timestamp Chain Visualization */}
+          <div className="my-8 p-6 bg-gray-50 dark:bg-gray-800 rounded-lg border">
+            <h4 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-200">
+              Timestamp Chain Visualization
+            </h4>
+            <div className="flex flex-col md:flex-row gap-4 items-center justify-center">
+              {/* Timestamp 1 */}
+              <div className="bg-white dark:bg-gray-700 p-4 rounded-lg border-2 border-blue-300 min-w-[180px]">
+                <h5 className="font-semibold text-center mb-2 text-blue-600 dark:text-blue-400">Timestamp 1</h5>
+                <div className="text-sm space-y-2">
+                  <div className="bg-gray-100 dark:bg-gray-600 p-2 rounded text-center">Block Data</div>
+                  <div className="text-center">↓ Hash</div>
+                  <div className="bg-yellow-100 dark:bg-yellow-800 p-2 rounded text-center font-mono text-xs">
+                    Hash: abc123...
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-2xl text-gray-400">→</div>
+
+              {/* Timestamp 2 */}
+              <div className="bg-white dark:bg-gray-700 p-4 rounded-lg border-2 border-green-300 min-w-[180px]">
+                <h5 className="font-semibold text-center mb-2 text-green-600 dark:text-green-400">Timestamp 2</h5>
+                <div className="text-sm space-y-2">
+                  <div className="bg-blue-100 dark:bg-blue-800 p-2 rounded text-center">Previous Hash: abc123...</div>
+                  <div className="bg-gray-100 dark:bg-gray-600 p-2 rounded text-center">New Block Data</div>
+                  <div className="text-center">↓ Hash</div>
+                  <div className="bg-yellow-100 dark:bg-yellow-800 p-2 rounded text-center font-mono text-xs">
+                    Hash: def456...
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-2xl text-gray-400">→</div>
+
+              {/* Timestamp 3 */}
+              <div className="bg-white dark:bg-gray-700 p-4 rounded-lg border-2 border-purple-300 min-w-[180px]">
+                <h5 className="font-semibold text-center mb-2 text-purple-600 dark:text-purple-400">Timestamp 3</h5>
+                <div className="text-sm space-y-2">
+                  <div className="bg-green-100 dark:bg-green-800 p-2 rounded text-center">Previous Hash: def456...</div>
+                  <div className="bg-gray-100 dark:bg-gray-600 p-2 rounded text-center">New Block Data</div>
+                  <div className="text-center">↓ Hash</div>
+                  <div className="bg-yellow-100 dark:bg-yellow-800 p-2 rounded text-center font-mono text-xs">
+                    Hash: ghi789...
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Chain explanation */}
+            <div className="mt-6 text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-center font-medium mb-2">How the Chain Forms:</p>
+              <div className="bg-blue-50 dark:bg-blue-900 p-4 rounded">
+                <p className="mb-2">
+                  <strong>Each timestamp includes the previous timestamp in its hash</strong>, creating an unbreakable
+                  chain:
+                </p>
+                <ul className="list-disc list-inside space-y-1 ml-4">
+                  <li>Timestamp 2's hash includes Timestamp 1's hash (abc123...)</li>
+                  <li>Timestamp 3's hash includes Timestamp 2's hash (def456...)</li>
+                  <li>This pattern continues, linking each timestamp to all previous ones</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <p>
+            The crucial innovation is that <strong>each timestamp includes the previous timestamp in its hash</strong>,
+            forming a chain. This creates what the whitepaper calls "reinforcement" - here's why this is so powerful:
+          </p>
+
+          <div className="bg-amber-50 dark:bg-amber-900/20 p-4 rounded-lg border border-amber-200 dark:border-amber-700">
+            <h5 className="font-semibold text-amber-800 dark:text-amber-200 mb-2">Understanding "Reinforcement":</h5>
+            <div className="space-y-3 text-amber-900 dark:text-amber-100">
+              <p>
+                <strong>1. Immutability through Dependency:</strong> If someone tries to alter the data in Timestamp 1,
+                its hash would change from "abc123..." to something else. But Timestamp 2 specifically includes
+                "abc123..." in its own hash calculation.
+              </p>
+              <p>
+                <strong>2. Cascading Protection:</strong> If Timestamp 1's hash changes, then Timestamp 2's hash would
+                also have to change (since it depends on the previous hash). This would then require Timestamp 3's hash
+                to change, and so on.
+              </p>
+              <p>
+                <strong>3. Exponential Difficulty:</strong> To successfully alter any historical data, an attacker would
+                need to recalculate not just that timestamp's hash, but ALL subsequent timestamps in the chain. The
+                further back in time the data is, the more work required to alter it.
+              </p>
+              <p>
+                <strong>4. "Reinforcement" Effect:</strong> Each new timestamp added to the chain makes ALL previous
+                timestamps more secure. It's like adding another lock to a door - each additional timestamp "reinforces"
+                the security of everything that came before it.
+              </p>
+            </div>
+          </div>
+
           <p>
             This mechanism provides a way to establish the chronological order of transactions without a trusted third
             party. By chaining timestamps, the network can verify the sequence in which transactions were broadcast and
