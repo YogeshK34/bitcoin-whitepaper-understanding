@@ -232,6 +232,40 @@ export default function Home() {
           </p>
         </CardContent>
       </Card>
+
+      <Separator className="my-12" />
+
+      {/* Timestamp Server Section */}
+      <Card className="mb-12 shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+            4. Timestamp Server: Preventing Double-Spending
+          </CardTitle>
+          <CardDescription className="text-gray-600 dark:text-gray-400">
+            How a decentralized timestamping mechanism ensures a single, agreed-upon history of transactions.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6 text-gray-700 dark:text-gray-300">
+          <p>
+            To solve the double-spending problem in a decentralized manner, the Bitcoin whitepaper introduces the
+            concept of a <strong>Timestamp Server</strong>. This server's primary role is to prove that transaction data
+            existed at a particular point in time.
+          </p>
+          <p>
+            The timestamp server works by taking a hash of a block of items to be timestamped and publicly broadcasting
+            the hash. This timestamp proves that the data must have existed at that time, because otherwise, the hash
+            could not have been generated. Each timestamp includes the previous timestamp in its hash, forming a{" "}
+            <strong>chain of timestamps</strong>. This chain reinforces the integrity of the data, as altering any past
+            data would require redoing all subsequent hashes.
+          </p>
+          <p>
+            This mechanism provides a way to establish the chronological order of transactions without a trusted third
+            party. By chaining timestamps, the network can verify the sequence in which transactions were broadcast and
+            accepted, ensuring that the first valid transaction for a given coin is the one that counts, effectively
+            preventing double-spending attempts.
+          </p>
+        </CardContent>
+      </Card>
     </div>
   )
 }
