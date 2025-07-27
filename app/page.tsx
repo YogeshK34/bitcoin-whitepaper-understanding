@@ -362,6 +362,65 @@ export default function Home() {
           </p>
         </CardContent>
       </Card>
+
+      <Separator className="my-12" />
+
+      {/* Proof-of-Work Section */}
+      <Card className="mb-12 shadow-lg">
+        <CardHeader>
+          <CardTitle className="text-3xl font-bold text-gray-800 dark:text-gray-100">
+            5. Proof-of-Work: Securing the Chain
+          </CardTitle>
+          <CardDescription className="text-gray-600 dark:text-gray-400">
+            How computational puzzles secure the blockchain and prevent tampering.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6 text-gray-700 dark:text-gray-300">
+          <p>
+            To implement a distributed timestamp server on a peer-to-peer basis, the whitepaper proposes using a{" "}
+            <strong>Proof-of-Work (PoW) system</strong>, similar to Adam Back's Hashcash. This is a fundamental shift
+            from relying on external, centralized timestamping methods like newspaper or Usenet posts.
+          </p>
+          <p>
+            The Proof-of-Work involves scanning for a value (a "nonce") that, when combined with the block's data and
+            hashed (e.g., with SHA-256), produces a hash that begins with a specific number of zero bits.
+          </p>
+          <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border border-blue-200 dark:border-blue-700">
+            <h5 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">
+              Understanding "Exponential Work" and "Single Hash Verification":
+            </h5>
+            <div className="space-y-3 text-blue-900 dark:text-blue-100">
+              <p>
+                <strong>"The average work required is exponential in the number of zero bits required"</strong> means
+                that finding a hash with more leading zeros becomes disproportionately harder. For example, if finding a
+                hash with one leading zero takes X amount of time, finding one with two leading zeros might take 2X,
+                three leading zeros 4X, and so on. Each additional zero bit roughly doubles the average computational
+                effort needed to find a valid hash. This exponential difficulty is what makes it so hard for an attacker
+                to generate a valid hash that meets the network's target.
+              </p>
+              <p>
+                However, once a valid hash is found, it <strong>"can be verified by executing a single hash"</strong>.
+                This is the beauty of cryptographic hash functions: anyone can take the block's data (including the
+                found nonce) and run it through the SHA-256 algorithm just once. If the resulting hash matches the
+                required pattern (e.g., starts with the correct number of zero bits), the work is verified instantly.
+                This asymmetry – hard to find, easy to verify – is critical for the network's efficiency and security.
+              </p>
+            </div>
+          </div>
+          <p>
+            For the Bitcoin timestamp network, this Proof-of-Work is implemented by incrementing a "nonce" (a number
+            used once) within the block until a value is found that makes the block's hash satisfy the required number
+            of leading zero bits.
+          </p>
+          <p>
+            Once this significant CPU effort has been expended to make a block satisfy the Proof-of-Work, that block
+            cannot be changed without redoing all that work. Furthermore, as later blocks are chained after it (each
+            with its own Proof-of-Work), the effort required to alter an old block would include redoing the
+            Proof-of-Work for all subsequent blocks in the chain, making it extremely difficult and computationally
+            prohibitive to tamper with past transactions.
+          </p>
+        </CardContent>
+      </Card>
     </div>
   )
 }
